@@ -1,6 +1,6 @@
 import ReactDom from 'react-dom'
 import React from 'react'
-import Main from './NotFound'
+import Main from './main'
 
 const Root = document.getElementById('app')
 

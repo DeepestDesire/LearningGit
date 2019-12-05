@@ -21,6 +21,7 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     open: true,
+    historyApiFallback: true,
   },
   plugins: [HtmlWebpackPluginEntry],
 }
