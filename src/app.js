@@ -1,6 +1,9 @@
 import ReactDom from 'react-dom'
 import React from 'react'
 import Main from './main'
+// import MainMD from './main.md'
+
+// console.log(MainMD)
 
 const Root = document.getElementById('app')
 
@@ -9,3 +12,4 @@ if (!Root) {
 }
 
 ReactDom.render(<Main />, Root)
+// Root.innerHTML = MainMD

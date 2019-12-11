@@ -1,6 +1,9 @@
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const marked = require('marked')
+const renderer = new marked.Renderer()
+
 var HtmlWebpackPluginEntry = new HtmlWebpackPlugin({
   title: 'demo',
   template: path.join(__dirname, 'index.html'),
@@ -16,7 +19,25 @@ module.exports = {
     // filename: '[name].bundle.js'
   },
   module: {
-    rules: [{ test: /\.js?$/, loader: 'babel-loader' }],
+    rules: [
+      { test: /\.js?$/, loader: 'babel-loader' },
+      { test: /\.jsx?$/, loader: 'babel-loader' },
+      {
+        test: /\.md$/,
+        use: [
+          {
+            loader: 'html-loader',
+          },
+          {
+            loader: 'markdown-loader',
+            options: {
+              pedantic: true,
+              renderer,
+            },
+          },
+        ],
+      },
+    ],
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
@@ -24,4 +45,9 @@ module.exports = {
     historyApiFallback: true,
   },
   plugins: [HtmlWebpackPluginEntry],
+  resolve: {
+    alias: {
+      '@src': path.join(__dirname, 'src'),
+    },
+  },
 }

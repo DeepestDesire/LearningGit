@@ -4,7 +4,7 @@ const routers = [
     path: '/dashboard',
     icon: 'iconhome',
     ignoreAuth: true,
-    component: () => import('@src/pages/Dashboard'),
+    component: () => import('@src/pages/HomePage/index.jsx'),
   },
 ]
 
