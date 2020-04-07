@@ -10,7 +10,6 @@ var HtmlWebpackPluginEntry = new HtmlWebpackPlugin({
 })
 
 module.exports = {
-  // mode: 'production',
   mode: 'development',
   entry: path.resolve(__dirname, 'src/app.js'),
   output: {
@@ -43,11 +42,16 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     open: true,
     historyApiFallback: true,
+    clientLogLevel: 'debug',
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
   },
   plugins: [HtmlWebpackPluginEntry],
   resolve: {
     alias: {
-      '@src': path.join(__dirname, 'src'),
+      '@src': path.resolve(__dirname, 'src'),
+      network: path.resolve(__dirname, 'src/network'),
     },
   },
 }
