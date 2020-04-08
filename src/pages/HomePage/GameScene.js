@@ -1,3 +1,5 @@
+import { uploadScore } from './request'
+
 export default function createGame(params) {
   // 实际应用场景改为window.innerWidth和window.innerHeight。
   // 这里是为了方便查看示例。
@@ -310,6 +312,7 @@ export default function createGame(params) {
     over: function() {
       var score = 0
       this.init = function() {
+        uploadScore(arguments[0])
         score = arguments[0]
       }
       this.create = function() {

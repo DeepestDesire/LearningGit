@@ -26,10 +26,8 @@ export default props => (
         console.log('form data', data)
         saveUserInfo(data)
         return new Promise(resolve => {
-          console.log('object')
           setTimeout(resolve, 2000)
         }).then(() => {
-          console.log('object1', data.username === 'error')
           props.history.push('/game')
           return data.username === 'error' ? { username: 'IN_USE' } : undefined
         })
@@ -106,7 +104,7 @@ function checkPhone(phone) {
 }
 
 function saveUserInfo(params) {
-  Object.keys(params).forEach(function(key) {
+  Object.keys(params).forEach(function (key) {
     localStorage.setItem(key, params[key])
   })
 }
