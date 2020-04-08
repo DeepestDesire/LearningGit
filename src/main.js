@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import MainLayout from './layout/Main/index.jsx'
 import NotFound from './NotFound'
 export default class Main extends Component {

@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
 import TextField from '@atlaskit/textfield'
 import Button, { ButtonGroup } from '@atlaskit/button'
-// import { Checkbox } from '@atlaskit/checkbox'
+import { Checkbox } from '@atlaskit/checkbox'
 import Form, {
-  // CheckboxField,
+  CheckboxField,
   Field,
   FormFooter,
   HelperMessage,
@@ -11,7 +11,7 @@ import Form, {
   ValidMessage,
 } from '@atlaskit/form'
 
-export default props => (
+export default () => (
   <div
     style={{
       display: 'flex',
@@ -24,69 +24,64 @@ export default props => (
     <Form
       onSubmit={data => {
         console.log('form data', data)
-        saveUserInfo(data)
-        return new Promise(resolve => {
-          console.log('object')
-          setTimeout(resolve, 2000)
-        }).then(() => {
-          console.log('object1', data.username === 'error')
-          props.history.push('/game')
-          return data.username === 'error' ? { username: 'IN_USE' } : undefined
-        })
+        return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>
+          data.username === 'error' ? { username: 'IN_USE' } : undefined
+        )
       }}
     >
       {({ formProps, submitting }) => (
         <form {...formProps}>
-          <Field
-            name="username"
-            label="姓名"
-            isRequired
-            defaultValue=""
-            validate={value =>
-              value && value.length < 2 ? 'TOO_SHORT' : undefined
-            }
-          >
+          <Field name="username" label="姓名" isRequired defaultValue="">
             {({ fieldProps, error }) => (
               <Fragment>
                 <TextField autoComplete="off" {...fieldProps} />
                 {!error && (
                   <HelperMessage>
-                    {/* You can use letters, numbers & periods. */}
+                    You can use letters, numbers & periods.
                   </HelperMessage>
+                )}
+                {error && (
+                  <ErrorMessage>
+                    This user name is already in use, try another one.
+                  </ErrorMessage>
                 )}
               </Fragment>
             )}
           </Field>
           <Field
-            name="mobile"
+            name="password"
             label="手机号"
             defaultValue=""
             isRequired
             validate={value =>
-              value && !checkPhone(value) ? 'TOO_SHORT' : undefined
+              value && value.length < 8 ? 'TOO_SHORT' : undefined
             }
           >
             {({ fieldProps, error, valid, meta }) => (
               <Fragment>
-                <TextField type="mobile" {...fieldProps} />
+                <TextField type="password" {...fieldProps} />
                 {!error && !valid && (
                   <HelperMessage>
                     Use 8 or more characters with a mix of letters, numbers &
                     symbols.
                   </HelperMessage>
                 )}
-                {error && <ErrorMessage>请输入是十一位手机号.</ErrorMessage>}
+                {error && (
+                  <ErrorMessage>
+                    Password needs to be more than 8 characters.
+                  </ErrorMessage>
+                )}
                 {valid && meta.dirty ? (
-                  <ValidMessage>手机号位数正确</ValidMessage>
+                  <ValidMessage>Awesome password!</ValidMessage>
                 ) : null}
               </Fragment>
             )}
           </Field>
-          {/* <CheckboxField name="remember" label="Remember me" defaultIsChecked>
+          <CheckboxField name="remember" label="Remember me" defaultIsChecked>
             {({ fieldProps }) => (
               <Checkbox {...fieldProps} label="Always sign in on this device" />
             )}
-          </CheckboxField> */}
+          </CheckboxField>
           <FormFooter>
             <ButtonGroup>
               {/* <Button appearance="subtle">Cancel</Button> */}
@@ -100,13 +95,3 @@ export default props => (
     </Form>
   </div>
 )
-
-function checkPhone(phone) {
-  return /^1\d{10}$/.test(phone)
-}
-
-function saveUserInfo(params) {
-  Object.keys(params).forEach(function(key) {
-    localStorage.setItem(key, params[key])
-  })
-}

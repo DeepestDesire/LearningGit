@@ -1,8 +1,8 @@
 export default function createGame(params) {
   // 实际应用场景改为window.innerWidth和window.innerHeight。
   // 这里是为了方便查看示例。
-  var width = 320
-  var height = 568
+  var width = window.innerWidth
+  var height = window.innerHeight
 
   // 创建游戏实例
   var game = new Phaser.Game(width, height, Phaser.AUTO, '#game')
