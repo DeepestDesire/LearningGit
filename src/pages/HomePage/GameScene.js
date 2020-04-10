@@ -43,10 +43,6 @@ export default function GameScene(props) {
           '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/one.png'
         )
         game.load.audio(
-          'bgMusic',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/audio/bgMusic.mp3'
-        )
-        game.load.audio(
           'scoreMusic',
           '//24haowan-cdn.shanyougame.com/pickApple2/assets/audio/addscore.mp3'
         )
@@ -92,7 +88,7 @@ export default function GameScene(props) {
           {
             fontSize: '40px',
             fontWeight: 'bold',
-            fill: '#f2bb15',
+            fill: '#333',
           }
         )
         title.anchor.setTo(0.5, 0.5)
@@ -103,14 +99,14 @@ export default function GameScene(props) {
           '点击任意位置开始',
           {
             fontSize: '20px',
-            fill: '#f2bb15',
+            fill: '#333',
           }
         )
         remind.anchor.setTo(0.5, 0.5)
         // 添加主角
         var man = game.add.sprite(
           game.world.centerX,
-          game.world.height * 0.88,
+          game.world.height * 0.855,
           'dude'
         )
         var manImage = game.cache.getImage('dude')
@@ -131,7 +127,6 @@ export default function GameScene(props) {
       var title // 分数
       var scoreMusic
       var bombMusic
-      var bgMusic
       this.create = function() {
         score = 0
         // 开启物理引擎
@@ -139,10 +134,6 @@ export default function GameScene(props) {
         game.physics.arcade.gravity.y = 600
         // 得分
         // 添加背景音乐
-        if (!bgMusic) {
-          bgMusic = game.add.audio('bgMusic')
-          bgMusic.loopFull()
-        }
         // 缓存其他音乐
         scoreMusic = game.add.audio('scoreMusic')
         bombMusic = game.add.audio('bombMusic')
@@ -153,7 +144,7 @@ export default function GameScene(props) {
         // 添加主角
         man = game.add.sprite(
           game.world.centerX,
-          game.world.height * 0.88,
+          game.world.height * 0.855,
           'dude'
         )
         var manImage = game.cache.getImage('dude')
@@ -170,7 +161,7 @@ export default function GameScene(props) {
           {
             fontSize: '40px',
             fontWeight: 'bold',
-            fill: '#f2bb15',
+            fill: '#333',
           }
         )
         title.anchor.setTo(0.5, 0.5)
@@ -308,7 +299,7 @@ export default function GameScene(props) {
         //   {
         //     fontSize: '40px',
         //     fontWeight: 'bold',
-        //     fill: '#f2bb15',
+        //     fill: '#333',
         //   }
         // )
         // title.anchor.setTo(0.5, 0.5)
@@ -320,7 +311,7 @@ export default function GameScene(props) {
         //   {
         //     fontSize: '30px',
         //     fontWeight: 'bold',
-        //     fill: '#f2bb15',
+        //     fill: '#333',
         //   }
         // )
         // scoreText.anchor.setTo(0.5, 0.5)
@@ -331,7 +322,7 @@ export default function GameScene(props) {
         //   {
         //     fontSize: '20px',
         //     fontWeight: 'bold',
-        //     fill: '#f2bb15',
+        //     fill: '#333',
         //   }
         // )
         // remind.anchor.setTo(0.5, 0.5)

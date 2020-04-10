@@ -65,7 +65,6 @@ export default function game(props) {
         <div style={styles.historyBg}>
           <div style={{ ...styles.font, marginTop: 130 }}>{score}</div>
           <div style={{ ...styles.font, marginTop: 20 }}>{sort}</div>
-          <div style={{ ...styles.detialFont }}>活动详情</div>
         </div>
         <div style={styles.buttonArray}>
           <div style={styles.restart} onClick={restartGame} />
@@ -75,7 +74,6 @@ export default function game(props) {
               props.history.push('/sort')
             }}
           />
-          <div style={styles.share} onClick={shareGame} />
         </div>
       </div>
     </div>

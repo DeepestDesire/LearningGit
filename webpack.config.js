@@ -1,5 +1,6 @@
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 // const marked = require('marked')
 // const renderer = new marked.Renderer()
@@ -9,9 +10,11 @@ var HtmlWebpackPluginEntry = new HtmlWebpackPlugin({
   template: path.join(__dirname, 'index.html'),
 })
 
+const isDevelopment = true
+
 module.exports = {
-  // mode: 'production',
-  mode: 'development',
+  mode: 'production',
+  // mode: 'development',
   entry: path.resolve(__dirname, 'src/app.js'),
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -25,6 +28,44 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: ['file-loader'],
+      },
+
+      {
+        test: /\.module\.s(a|c)ss$/,
+        loader: [
+          isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              sourceMap: isDevelopment,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: isDevelopment,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        loader: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.s(a|c)ss$/,
+        exclude: /\.module.(s(a|c)ss)$/,
+        loader: [
+          isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: isDevelopment,
+            },
+          },
+        ],
       },
       // {
       //   test: /\.md$/,
@@ -52,8 +93,15 @@ module.exports = {
       '/api': 'http://localhost:3000',
     },
   },
-  plugins: [HtmlWebpackPluginEntry],
+  plugins: [
+    HtmlWebpackPluginEntry,
+    new MiniCssExtractPlugin({
+      filename: isDevelopment ? '[name].css' : '[name].[hash].css',
+      chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css',
+    }),
+  ],
   resolve: {
+    extensions: ['.js', '.jsx', '.scss'],
     alias: {
       '@src': path.resolve(__dirname, 'src'),
       '@images': path.resolve(__dirname, 'public/images'),

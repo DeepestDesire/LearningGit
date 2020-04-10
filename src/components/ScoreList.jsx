@@ -56,7 +56,7 @@ function Cell(props) {
       <div style={{ marginLeft: 15 }}>{index}</div>
       <div style={{ marginLeft: 40 }}>
         <div style={{ height: 15, marginBottom: 8 }}>
-          {`${data.username}`.replace(/^(.).*(.)$/, '$1***$2')}
+          {`${data.username}`.replace(/^(.).*(.)$/, '$1**')}
         </div>
         <div>{data.score}</div>
       </div>

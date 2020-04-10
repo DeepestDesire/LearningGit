@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import Modal from 'react-modal'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import bg from '@images/game_home_bg.png'
 import game_rule from '@images/game_rule.png'
@@ -31,15 +33,35 @@ export default props => {
 
   function goToPlayGame() {
     // 判断用户信息是否已经录入
-    //已经录入
-    //没有录入 弹窗
-    setOpen(true)
-    setType(DIALOGTYPE.INFO)
+    const isLogin = judgeUserInfo()
+
+    if (isLogin) {
+      //已经录入
+      props.history.push('/game')
+    } else {
+      //没有录入 弹窗
+      setOpen(true)
+      setType(DIALOGTYPE.INFO)
+    }
   }
 
   function playGame() {
     var username = document.getElementById('username').value
     var mobile = document.getElementById('mobile').value
+
+    if (!username || username.length < 2) {
+      toast.info('请输入正确的姓名')
+      return
+    }
+
+    function checkPhone(phone) {
+      return /^1\d{10}$/.test(phone)
+    }
+
+    if (!checkPhone(mobile)) {
+      toast.info('请输入正确的手机号', { className: 'rotateY animated' })
+      return
+    }
     saveUserInfo({ username, mobile })
     props.history.push('/game')
   }
@@ -78,6 +100,7 @@ export default props => {
               color: 'rgb(173, 98, 98)',
               marginTop: 90,
               width: 200,
+              textAlign: 'center',
             }}
             onChange={value => (username = value)}
             placeholder="请输入姓名"
@@ -91,12 +114,14 @@ export default props => {
               color: 'rgb(173, 98, 98)',
               width: 200,
               marginTop: 20,
+              textAlign: 'center',
             }}
             onChange={value => (mobile = value)}
             placeholder="请输入手机号"
           ></input>
         </div>
         <button style={styles.arrowButton} onClick={playGame} />
+        <ToastContainer />
       </div>
     )
   }
@@ -105,7 +130,7 @@ export default props => {
     <div style={styles.containner}>
       <div style={styles.gameRule} onClick={openGameRule} />
       <div style={styles.play} onClick={goToPlayGame} />
-      <Modal isOpen={open} style={styles.model}>
+      <Modal isOpen={open} style={styles.model} ariaHideApp={false}>
         {type === DIALOGTYPE.RULE ? ruleComponent() : userInfoComponent()}
       </Modal>
     </div>
@@ -148,7 +173,7 @@ const styles = {
     alignItems: 'center',
     width: 335,
     height: 247,
-    backgroundSize: 'cover',
+    backgroundSize: '100% 100%',
     backgroundImage: `url(${p_input})`,
   },
   closeButton: {
@@ -161,6 +186,7 @@ const styles = {
   },
   arrowButton: {
     width: 65,
+    marginTop: 10,
     height: 65,
     border: 'none',
     backgroundSize: 'contain',
@@ -186,4 +212,10 @@ function saveUserInfo(params) {
   Object.keys(params).forEach(function(key) {
     localStorage.setItem(key, params[key])
   })
+}
+
+function judgeUserInfo(params) {
+  const name = localStorage.getItem('username')
+  const mobile = localStorage.getItem('mobile')
+  return name && mobile
 }
