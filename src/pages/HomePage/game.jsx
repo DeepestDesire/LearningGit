@@ -3,7 +3,11 @@ import GameScene from './GameScene'
 
 export default function game(props) {
   useEffect(() => {
-    GameScene()
+    GameScene(props)
+    return () => {
+      const canvas = document.getElementsByTagName('canvas')[0]
+      document.body.removeChild(canvas)
+    }
   })
   return null
 }

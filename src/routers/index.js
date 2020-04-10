@@ -1,6 +1,7 @@
 import Main from '@src/pages/HomePage/index.jsx'
 import Game from '@src/pages/HomePage/game.jsx'
-import Login from '@src/pages/HomePage/login.jsx'
+import End from '@src/pages/HomePage/end.jsx'
+import Sort from '@src/pages/HomePage/sort.jsx'
 
 const routers = [
   {
@@ -11,11 +12,18 @@ const routers = [
     component: Game,
   },
   {
-    name: '登录',
-    path: '/login',
+    name: '游戏结束',
+    path: '/end',
     icon: 'iconhome',
     ignoreAuth: true,
-    component: Login,
+    component: End,
+  },
+  {
+    name: '游戏排名',
+    path: '/sort',
+    icon: 'iconhome',
+    ignoreAuth: true,
+    component: Sort,
   },
   {
     name: '首页',

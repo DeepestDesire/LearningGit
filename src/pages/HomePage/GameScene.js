@@ -1,6 +1,12 @@
-import { uploadScore } from './request'
+import { uploadScore } from 'network/index'
+import p_bg from '@images/p_bg.png'
+import item_car from '@images/item_car.png'
+import item_fireBall from '@images/item_fireBall.png'
+import item_gift1 from '@images/item_gift1.png'
+import item_gift2 from '@images/item_gift2.png'
+import item_dimond from '@images/item_dimond.png'
 
-export default function createGame(params) {
+export default function GameScene(props) {
   // 实际应用场景改为window.innerWidth和window.innerHeight。
   // 这里是为了方便查看示例。
   var width = window.innerWidth
@@ -15,33 +21,15 @@ export default function createGame(params) {
     preload: function() {
       this.preload = function() {
         // 设置背景为黑色
-        game.stage.backgroundColor = '#000000'
+        game.stage.backgroundColor = 'rgba(21, 169, 255,0.1)'
         // 加载游戏资源
         game.load.crossOrigin = 'anonymous' // 设置跨域
-        game.load.image(
-          'bg',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/bg.png'
-        )
-        game.load.image(
-          'dude',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/dude.png'
-        )
-        game.load.image(
-          'green',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/green.png'
-        )
-        game.load.image(
-          'red',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/red.png'
-        )
-        game.load.image(
-          'yellow',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/yellow.png'
-        )
-        game.load.image(
-          'bomb',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/bomb.png'
-        )
+        game.load.image('bg', p_bg)
+        game.load.image('dude', item_car)
+        game.load.image('green', item_gift1)
+        game.load.image('red', item_gift2)
+        game.load.image('yellow', item_dimond)
+        game.load.image('bomb', item_fireBall)
         game.load.image(
           'five',
           '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/five.png'
@@ -83,20 +71,9 @@ export default function createGame(params) {
         })
         // 监听加载完毕事件
         game.load.onLoadComplete.add(onLoad)
-        // 最小展示时间，示例为3秒
-        var deadLine = false
-        setTimeout(function() {
-          deadLine = true
-        }, 3000)
         // 加载完毕回调方法
         function onLoad() {
-          if (deadLine) {
-            // 已到达最小展示时间，可以进入下一个场景
-            game.state.start('created')
-          } else {
-            // 还没有到最小展示时间，1秒后重试
-            setTimeout(onLoad, 1000)
-          }
+          game.state.start('created')
         }
       }
     },
@@ -111,7 +88,7 @@ export default function createGame(params) {
         var title = game.add.text(
           game.world.centerX,
           game.world.height * 0.25,
-          '小恐龙接苹果',
+          '夺宝奇兵',
           {
             fontSize: '40px',
             fontWeight: 'bold',
@@ -133,11 +110,11 @@ export default function createGame(params) {
         // 添加主角
         var man = game.add.sprite(
           game.world.centerX,
-          game.world.height * 0.75,
+          game.world.height * 0.88,
           'dude'
         )
         var manImage = game.cache.getImage('dude')
-        man.width = game.world.width * 0.2
+        man.width = game.world.width * 0.3
         man.height = (man.width / manImage.width) * manImage.height
         man.anchor.setTo(0.5, 0.5)
         // 添加点击事件
@@ -159,7 +136,7 @@ export default function createGame(params) {
         score = 0
         // 开启物理引擎
         game.physics.startSystem(Phaser.Physics.Arcade)
-        game.physics.arcade.gravity.y = 300
+        game.physics.arcade.gravity.y = 600
         // 得分
         // 添加背景音乐
         if (!bgMusic) {
@@ -176,11 +153,11 @@ export default function createGame(params) {
         // 添加主角
         man = game.add.sprite(
           game.world.centerX,
-          game.world.height * 0.75,
+          game.world.height * 0.88,
           'dude'
         )
         var manImage = game.cache.getImage('dude')
-        man.width = game.world.width * 0.2
+        man.width = game.world.width * 0.3
         man.height = (man.width / manImage.width) * manImage.height
         man.anchor.setTo(0.5, 0.5)
         game.physics.enable(man) // 加入物理运动
@@ -312,53 +289,56 @@ export default function createGame(params) {
     over: function() {
       var score = 0
       this.init = function() {
-        uploadScore(arguments[0])
+        let username = localStorage.getItem('username')
+        let mobile = localStorage.getItem('mobile')
+        uploadScore({ score: arguments[0], mobile, username })
         score = arguments[0]
+        props.history.push(`/end?score=${score}`)
       }
       this.create = function() {
         // 添加背景
-        var bg = game.add.image(0, 0, 'bg')
-        bg.width = game.world.width
-        bg.height = game.world.height
-        // 添加文本
-        var title = game.add.text(
-          game.world.centerX,
-          game.world.height * 0.25,
-          '游戏结束',
-          {
-            fontSize: '40px',
-            fontWeight: 'bold',
-            fill: '#f2bb15',
-          }
-        )
-        title.anchor.setTo(0.5, 0.5)
-        var scoreStr = '你的得分是：' + score + '分'
-        var scoreText = game.add.text(
-          game.world.centerX,
-          game.world.height * 0.4,
-          scoreStr,
-          {
-            fontSize: '30px',
-            fontWeight: 'bold',
-            fill: '#f2bb15',
-          }
-        )
-        scoreText.anchor.setTo(0.5, 0.5)
-        var remind = game.add.text(
-          game.world.centerX,
-          game.world.height * 0.6,
-          '点击任意位置再玩一次',
-          {
-            fontSize: '20px',
-            fontWeight: 'bold',
-            fill: '#f2bb15',
-          }
-        )
-        remind.anchor.setTo(0.5, 0.5)
-        // 添加点击事件
-        game.input.onTap.add(function() {
-          game.state.start('play')
-        })
+        // var bg = game.add.image(0, 0, 'bg')
+        // bg.width = game.world.width
+        // bg.height = game.world.height
+        // // 添加文本
+        // var title = game.add.text(
+        //   game.world.centerX,
+        //   game.world.height * 0.25,
+        //   '游戏结束',
+        //   {
+        //     fontSize: '40px',
+        //     fontWeight: 'bold',
+        //     fill: '#f2bb15',
+        //   }
+        // )
+        // title.anchor.setTo(0.5, 0.5)
+        // var scoreStr = '你的得分是：' + score + '分'
+        // var scoreText = game.add.text(
+        //   game.world.centerX,
+        //   game.world.height * 0.4,
+        //   scoreStr,
+        //   {
+        //     fontSize: '30px',
+        //     fontWeight: 'bold',
+        //     fill: '#f2bb15',
+        //   }
+        // )
+        // scoreText.anchor.setTo(0.5, 0.5)
+        // var remind = game.add.text(
+        //   game.world.centerX,
+        //   game.world.height * 0.6,
+        //   '点击任意位置再玩一次',
+        //   {
+        //     fontSize: '20px',
+        //     fontWeight: 'bold',
+        //     fill: '#f2bb15',
+        //   }
+        // )
+        // remind.anchor.setTo(0.5, 0.5)
+        // // 添加点击事件
+        // game.input.onTap.add(function() {
+        //   game.state.start('play')
+        // })
       }
     },
   }
