@@ -13,3 +13,16 @@ export function uploadScore(data) {
     data,
   })
 }
+
+/**
+ * 获取排行接口
+ *
+ * @param {*} params
+ * @returns
+ */
+export function getTopList() {
+  return axios({
+    method: 'post',
+    url: '/api/score/toplist',
+  })
+}

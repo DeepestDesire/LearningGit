@@ -1,8 +1,8 @@
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const marked = require('marked')
-const renderer = new marked.Renderer()
+// const marked = require('marked')
+// const renderer = new marked.Renderer()
 
 var HtmlWebpackPluginEntry = new HtmlWebpackPlugin({
   title: 'demo',
@@ -10,7 +10,8 @@ var HtmlWebpackPluginEntry = new HtmlWebpackPlugin({
 })
 
 module.exports = {
-  mode: 'production',
+  // mode: 'production',
+  mode: 'development',
   entry: path.resolve(__dirname, 'src/app.js'),
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -22,20 +23,24 @@ module.exports = {
       { test: /\.js?$/, loader: 'babel-loader' },
       { test: /\.jsx?$/, loader: 'babel-loader' },
       {
-        test: /\.md$/,
-        use: [
-          {
-            loader: 'html-loader',
-          },
-          {
-            loader: 'markdown-loader',
-            options: {
-              pedantic: true,
-              renderer,
-            },
-          },
-        ],
+        test: /\.(png|svg|jpg|gif)$/,
+        use: ['file-loader'],
       },
+      // {
+      //   test: /\.md$/,
+      //   use: [
+      //     {
+      //       loader: 'html-loader',
+      //     },
+      //     {
+      //       loader: 'markdown-loader',
+      //       options: {
+      //         pedantic: true,
+      //         renderer,
+      //       },
+      //     },
+      //   ],
+      // },
     ],
   },
   devServer: {
@@ -51,7 +56,11 @@ module.exports = {
   resolve: {
     alias: {
       '@src': path.resolve(__dirname, 'src'),
+      '@images': path.resolve(__dirname, 'public/images'),
       network: path.resolve(__dirname, 'src/network'),
     },
+  },
+  watchOptions: {
+    ignored: /node_modules/,
   },
 }

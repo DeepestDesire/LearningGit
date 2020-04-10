@@ -1,3 +1,12 @@
+import { uploadScore } from 'network/index'
+import p_bg from '@images/p_bg.png'
+import item_car from '@images/item_car.png'
+import item_fireBall from '@images/item_fireBall.png'
+import item_gift1 from '@images/item_gift1.png'
+import item_gift2 from '@images/item_gift2.png'
+import item_dimond from '@images/item_dimond.png'
+
+item_gift1
 export default function createGame(params) {
   // 实际应用场景改为window.innerWidth和window.innerHeight。
   // 这里是为了方便查看示例。
@@ -13,33 +22,15 @@ export default function createGame(params) {
     preload: function() {
       this.preload = function() {
         // 设置背景为黑色
-        game.stage.backgroundColor = '#000000'
+        game.stage.backgroundColor = 'rgba(21, 169, 255,0.1)'
         // 加载游戏资源
         game.load.crossOrigin = 'anonymous' // 设置跨域
-        game.load.image(
-          'bg',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/bg.png'
-        )
-        game.load.image(
-          'dude',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/dude.png'
-        )
-        game.load.image(
-          'green',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/green.png'
-        )
-        game.load.image(
-          'red',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/red.png'
-        )
-        game.load.image(
-          'yellow',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/yellow.png'
-        )
-        game.load.image(
-          'bomb',
-          '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/bomb.png'
-        )
+        game.load.image('bg', p_bg)
+        game.load.image('dude', item_car)
+        game.load.image('green', item_gift1)
+        game.load.image('red', item_gift2)
+        game.load.image('yellow', item_dimond)
+        game.load.image('bomb', item_fireBall)
         game.load.image(
           'five',
           '//24haowan-cdn.shanyougame.com/pickApple2/assets/images/five.png'
@@ -131,11 +122,11 @@ export default function createGame(params) {
         // 添加主角
         var man = game.add.sprite(
           game.world.centerX,
-          game.world.height * 0.75,
+          game.world.height * 0.88,
           'dude'
         )
         var manImage = game.cache.getImage('dude')
-        man.width = game.world.width * 0.2
+        man.width = game.world.width * 0.3
         man.height = (man.width / manImage.width) * manImage.height
         man.anchor.setTo(0.5, 0.5)
         // 添加点击事件
@@ -157,7 +148,7 @@ export default function createGame(params) {
         score = 0
         // 开启物理引擎
         game.physics.startSystem(Phaser.Physics.Arcade)
-        game.physics.arcade.gravity.y = 300
+        game.physics.arcade.gravity.y = 600
         // 得分
         // 添加背景音乐
         if (!bgMusic) {
@@ -174,11 +165,11 @@ export default function createGame(params) {
         // 添加主角
         man = game.add.sprite(
           game.world.centerX,
-          game.world.height * 0.75,
+          game.world.height * 0.88,
           'dude'
         )
         var manImage = game.cache.getImage('dude')
-        man.width = game.world.width * 0.2
+        man.width = game.world.width * 0.3
         man.height = (man.width / manImage.width) * manImage.height
         man.anchor.setTo(0.5, 0.5)
         game.physics.enable(man) // 加入物理运动
@@ -310,6 +301,9 @@ export default function createGame(params) {
     over: function() {
       var score = 0
       this.init = function() {
+        let username = localStorage.getItem('username')
+        let mobile = localStorage.getItem('mobile')
+        uploadScore({ score: arguments[0], mobile, username })
         score = arguments[0]
       }
       this.create = function() {

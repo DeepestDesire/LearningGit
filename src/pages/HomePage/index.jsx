@@ -1,108 +1,185 @@
-import React, { Fragment } from 'react'
-import TextField from '@atlaskit/textfield'
-import Button, { ButtonGroup } from '@atlaskit/button'
-// import { Checkbox } from '@atlaskit/checkbox'
-import Form, {
-  // CheckboxField,
-  Field,
-  FormFooter,
-  HelperMessage,
-  ErrorMessage,
-  ValidMessage,
-} from '@atlaskit/form'
+import React, { useState } from 'react'
+import Modal from 'react-modal'
 
-export default props => (
-  <div
-    style={{
-      display: 'flex',
-      width: '400px',
-      maxWidth: '100%',
-      margin: '0 auto',
-      flexDirection: 'column',
-    }}
-  >
-    <Form
-      onSubmit={data => {
-        console.log('form data', data)
-        saveUserInfo(data)
-        return new Promise(resolve => {
-          console.log('object')
-          setTimeout(resolve, 2000)
-        }).then(() => {
-          console.log('object1', data.username === 'error')
-          props.history.push('/game')
-          return data.username === 'error' ? { username: 'IN_USE' } : undefined
-        })
-      }}
-    >
-      {({ formProps, submitting }) => (
-        <form {...formProps}>
-          <Field
-            name="username"
-            label="姓名"
-            isRequired
-            defaultValue=""
-            validate={value =>
-              value && value.length < 2 ? 'TOO_SHORT' : undefined
-            }
-          >
-            {({ fieldProps, error }) => (
-              <Fragment>
-                <TextField autoComplete="off" {...fieldProps} />
-                {!error && (
-                  <HelperMessage>
-                    {/* You can use letters, numbers & periods. */}
-                  </HelperMessage>
-                )}
-              </Fragment>
-            )}
-          </Field>
-          <Field
-            name="mobile"
-            label="手机号"
-            defaultValue=""
-            isRequired
-            validate={value =>
-              value && !checkPhone(value) ? 'TOO_SHORT' : undefined
-            }
-          >
-            {({ fieldProps, error, valid, meta }) => (
-              <Fragment>
-                <TextField type="mobile" {...fieldProps} />
-                {!error && !valid && (
-                  <HelperMessage>
-                    Use 8 or more characters with a mix of letters, numbers &
-                    symbols.
-                  </HelperMessage>
-                )}
-                {error && <ErrorMessage>请输入是十一位手机号.</ErrorMessage>}
-                {valid && meta.dirty ? (
-                  <ValidMessage>手机号位数正确</ValidMessage>
-                ) : null}
-              </Fragment>
-            )}
-          </Field>
-          {/* <CheckboxField name="remember" label="Remember me" defaultIsChecked>
-            {({ fieldProps }) => (
-              <Checkbox {...fieldProps} label="Always sign in on this device" />
-            )}
-          </CheckboxField> */}
-          <FormFooter>
-            <ButtonGroup>
-              {/* <Button appearance="subtle">Cancel</Button> */}
-              <Button type="submit" appearance="primary" isLoading={submitting}>
-                开始玩游戏
-              </Button>
-            </ButtonGroup>
-          </FormFooter>
-        </form>
-      )}
-    </Form>
-  </div>
-)
+import bg from '@images/game_home_bg.png'
+import game_rule from '@images/game_rule.png'
+import ic_play from '@images/ic_play.png'
+import p_info from '@images/p_info.png'
+import ic_close from '@images/ic_close.png'
+import ic_next from '@images/ic_next.png'
+import p_input from '@images/p_input.png'
 
-function checkPhone(phone) {
-  return /^1\d{10}$/.test(phone)
+const DIALOGTYPE = {
+  RULE: 'RULE',
+  INFO: 'INFO',
+}
+
+export default props => {
+  const [open, setOpen] = useState(false)
+  const [type, setType] = useState('')
+  let username = ''
+  let mobile = ''
+
+  function openGameRule() {
+    setOpen(true)
+    setType(DIALOGTYPE.RULE)
+  }
+
+  function closeGameRule() {
+    setOpen(false)
+  }
+
+  function goToPlayGame() {
+    // 判断用户信息是否已经录入
+    //已经录入
+    //没有录入 弹窗
+    setOpen(true)
+    setType(DIALOGTYPE.INFO)
+  }
+
+  function playGame() {
+    var username = document.getElementById('username').value
+    var mobile = document.getElementById('mobile').value
+    saveUserInfo({ username, mobile })
+    props.history.push('/game')
+  }
+
+  function ruleComponent() {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <div style={styles.ruleInfos} />
+        <button style={styles.closeButton} onClick={closeGameRule} />
+      </div>
+    )
+  }
+
+  function userInfoComponent() {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <div style={styles.userInfo}>
+          <input
+            id="username"
+            style={{
+              backgroundColor: 'transparent',
+              border: 'none',
+              fontSize: 22,
+              color: 'rgb(173, 98, 98)',
+              marginTop: 90,
+              width: 200,
+            }}
+            onChange={value => (username = value)}
+            placeholder="请输入姓名"
+          ></input>
+          <input
+            id="mobile"
+            style={{
+              backgroundColor: 'transparent',
+              border: 'none',
+              fontSize: 22,
+              color: 'rgb(173, 98, 98)',
+              width: 200,
+              marginTop: 20,
+            }}
+            onChange={value => (mobile = value)}
+            placeholder="请输入手机号"
+          ></input>
+        </div>
+        <button style={styles.arrowButton} onClick={playGame} />
+      </div>
+    )
+  }
+
+  return (
+    <div style={styles.containner}>
+      <div style={styles.gameRule} onClick={openGameRule} />
+      <div style={styles.play} onClick={goToPlayGame} />
+      <Modal isOpen={open} style={styles.model}>
+        {type === DIALOGTYPE.RULE ? ruleComponent() : userInfoComponent()}
+      </Modal>
+    </div>
+  )
+}
+
+const styles = {
+  containner: {
+    backgroundSize: 'cover',
+    height: window.innerHeight,
+    backgroundImage: `url(${bg})`,
+  },
+  gameRule: {
+    width: 90,
+    height: 30,
+    top: 70,
+    right: 10,
+    position: 'absolute',
+    backgroundSize: 'contain',
+    backgroundImage: `url(${game_rule})`,
+  },
+  play: {
+    width: 115,
+    height: 115,
+    top: window.innerHeight / 2 - 115 / 2,
+    right: window.innerWidth / 2 - 115 / 2,
+    position: 'absolute',
+    backgroundSize: 'contain',
+    backgroundImage: `url(${ic_play})`,
+  },
+  ruleInfos: {
+    width: 335,
+    height: 247,
+    backgroundSize: 'cover',
+    backgroundImage: `url(${p_info})`,
+  },
+  userInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: 335,
+    height: 247,
+    backgroundSize: 'cover',
+    backgroundImage: `url(${p_input})`,
+  },
+  closeButton: {
+    width: 65,
+    height: 65,
+    border: 'none',
+    backgroundSize: 'contain',
+    backgroundImage: `url(${ic_close})`,
+    backgroundColor: 'transparent',
+  },
+  arrowButton: {
+    width: 65,
+    height: 65,
+    border: 'none',
+    backgroundSize: 'contain',
+    backgroundImage: `url(${ic_next})`,
+    backgroundColor: 'transparent',
+  },
+  model: {
+    overlay: {
+      backgroundColor: 'rgba(0,0,0,0.60)',
+    },
+    content: {
+      padding: 0,
+      height: 420,
+      position: 'static',
+      paddingTop: window.innerHeight / 2 - 420 / 2,
+      border: 'none',
+      backgroundColor: 'transparent',
+    },
+  },
 }
 
 function saveUserInfo(params) {
