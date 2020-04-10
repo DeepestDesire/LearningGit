@@ -34,16 +34,22 @@ export default function game(props) {
 
   const [sort, setSort] = useState('查询中')
   useEffect(() => {
-    getSortByScore({ score }).then(data => {
+    getSortByScore({ score }).then(({ data }) => {
       const { data: sort, code } = data
-      setSort(sort)
+      if (code === '000') {
+        setSort(sort + 1)
+      }
     })
   })
 
   const restartGame = () => {
     props.history.push('/game')
   }
-  function closeGameRule(params) {}
+
+  function shareGame() {
+    console.log('object')
+  }
+
   return (
     <div style={styles.containner}>
       <div
@@ -69,7 +75,7 @@ export default function game(props) {
               props.history.push('/sort')
             }}
           />
-          <div style={styles.share} onClick={closeGameRule} />
+          <div style={styles.share} onClick={shareGame} />
         </div>
       </div>
     </div>
