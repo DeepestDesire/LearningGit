@@ -26,3 +26,17 @@ export function getTopList() {
     url: '/api/score/toplist',
   })
 }
+
+/**
+ * 获取当前排行接口
+ *
+ * @param {*} params
+ * @returns
+ */
+export function getSortByScore(params) {
+  return axios({
+    method: 'get',
+    url: '/api/score/getsort',
+    params,
+  })
+}

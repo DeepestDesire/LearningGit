@@ -6,8 +6,7 @@ import item_gift1 from '@images/item_gift1.png'
 import item_gift2 from '@images/item_gift2.png'
 import item_dimond from '@images/item_dimond.png'
 
-item_gift1
-export default function createGame(params) {
+export default function GameScene(props) {
   // 实际应用场景改为window.innerWidth和window.innerHeight。
   // 这里是为了方便查看示例。
   var width = window.innerWidth
@@ -72,20 +71,9 @@ export default function createGame(params) {
         })
         // 监听加载完毕事件
         game.load.onLoadComplete.add(onLoad)
-        // 最小展示时间，示例为3秒
-        var deadLine = false
-        setTimeout(function() {
-          deadLine = true
-        }, 3000)
         // 加载完毕回调方法
         function onLoad() {
-          if (deadLine) {
-            // 已到达最小展示时间，可以进入下一个场景
-            game.state.start('created')
-          } else {
-            // 还没有到最小展示时间，1秒后重试
-            setTimeout(onLoad, 1000)
-          }
+          game.state.start('created')
         }
       }
     },
@@ -100,7 +88,7 @@ export default function createGame(params) {
         var title = game.add.text(
           game.world.centerX,
           game.world.height * 0.25,
-          '小恐龙接苹果',
+          '夺宝奇兵',
           {
             fontSize: '40px',
             fontWeight: 'bold',
@@ -305,51 +293,52 @@ export default function createGame(params) {
         let mobile = localStorage.getItem('mobile')
         uploadScore({ score: arguments[0], mobile, username })
         score = arguments[0]
+        props.history.push(`/end?score=${score}`)
       }
       this.create = function() {
         // 添加背景
-        var bg = game.add.image(0, 0, 'bg')
-        bg.width = game.world.width
-        bg.height = game.world.height
-        // 添加文本
-        var title = game.add.text(
-          game.world.centerX,
-          game.world.height * 0.25,
-          '游戏结束',
-          {
-            fontSize: '40px',
-            fontWeight: 'bold',
-            fill: '#f2bb15',
-          }
-        )
-        title.anchor.setTo(0.5, 0.5)
-        var scoreStr = '你的得分是：' + score + '分'
-        var scoreText = game.add.text(
-          game.world.centerX,
-          game.world.height * 0.4,
-          scoreStr,
-          {
-            fontSize: '30px',
-            fontWeight: 'bold',
-            fill: '#f2bb15',
-          }
-        )
-        scoreText.anchor.setTo(0.5, 0.5)
-        var remind = game.add.text(
-          game.world.centerX,
-          game.world.height * 0.6,
-          '点击任意位置再玩一次',
-          {
-            fontSize: '20px',
-            fontWeight: 'bold',
-            fill: '#f2bb15',
-          }
-        )
-        remind.anchor.setTo(0.5, 0.5)
-        // 添加点击事件
-        game.input.onTap.add(function() {
-          game.state.start('play')
-        })
+        // var bg = game.add.image(0, 0, 'bg')
+        // bg.width = game.world.width
+        // bg.height = game.world.height
+        // // 添加文本
+        // var title = game.add.text(
+        //   game.world.centerX,
+        //   game.world.height * 0.25,
+        //   '游戏结束',
+        //   {
+        //     fontSize: '40px',
+        //     fontWeight: 'bold',
+        //     fill: '#f2bb15',
+        //   }
+        // )
+        // title.anchor.setTo(0.5, 0.5)
+        // var scoreStr = '你的得分是：' + score + '分'
+        // var scoreText = game.add.text(
+        //   game.world.centerX,
+        //   game.world.height * 0.4,
+        //   scoreStr,
+        //   {
+        //     fontSize: '30px',
+        //     fontWeight: 'bold',
+        //     fill: '#f2bb15',
+        //   }
+        // )
+        // scoreText.anchor.setTo(0.5, 0.5)
+        // var remind = game.add.text(
+        //   game.world.centerX,
+        //   game.world.height * 0.6,
+        //   '点击任意位置再玩一次',
+        //   {
+        //     fontSize: '20px',
+        //     fontWeight: 'bold',
+        //     fill: '#f2bb15',
+        //   }
+        // )
+        // remind.anchor.setTo(0.5, 0.5)
+        // // 添加点击事件
+        // game.input.onTap.add(function() {
+        //   game.state.start('play')
+        // })
       }
     },
   }
