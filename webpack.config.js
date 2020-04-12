@@ -1,14 +1,10 @@
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 // const marked = require('marked')
 // const renderer = new marked.Renderer()
-
-var HtmlWebpackPluginEntry = new HtmlWebpackPlugin({
-  title: 'demo',
-  template: path.join(__dirname, 'index.html'),
-})
 
 const isDevelopment = true
 
@@ -94,7 +90,11 @@ module.exports = {
     },
   },
   plugins: [
-    HtmlWebpackPluginEntry,
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      title: 'demo',
+      template: path.join(__dirname, 'index.html'),
+    }),
     new MiniCssExtractPlugin({
       filename: isDevelopment ? '[name].css' : '[name].[hash].css',
       chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css',

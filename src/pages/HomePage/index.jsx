@@ -180,6 +180,7 @@ const styles = {
     width: 65,
     height: 65,
     border: 'none',
+    marginTop: 10,
     backgroundSize: 'contain',
     backgroundImage: `url(${ic_close})`,
     backgroundColor: 'transparent',

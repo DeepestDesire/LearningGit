@@ -84,7 +84,7 @@ export default function GameScene(props) {
         var title = game.add.text(
           game.world.centerX,
           game.world.height * 0.25,
-          '夺宝奇兵',
+          '空间大作战',
           {
             fontSize: '40px',
             fontWeight: 'bold',

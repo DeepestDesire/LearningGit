@@ -7,10 +7,10 @@ import p_history from '@images/p_history.png'
 import ic_close from '@images/ic_close.png'
 
 export default function Sort(props) {
-  const [data, setData] = useState([])
+  const [data, setData] = useState(null)
 
   useEffect(() => {
-    if (data.length === 0) {
+    if (!data) {
       getTopList()
         .then(({ data: { data, code } }) => {
           if (code === '000') {
@@ -34,7 +34,7 @@ export default function Sort(props) {
         }}
       >
         <div style={styles.historyBg}>
-          <ScoreList data={data}></ScoreList>
+          <ScoreList data={data || []}></ScoreList>
         </div>
         <div style={styles.buttonArray}>
           <div
