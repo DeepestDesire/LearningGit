@@ -200,7 +200,7 @@ export default function GameScene(props) {
           // 设置苹果与游戏边缘碰撞，
           apple.body.collideWorldBounds = true
           apple.body.onWorldBounds = new Phaser.Signal()
-          apple.body.onWorldBounds.add(function(apple, up, down, left, right) {
+          apple.body.onWorldBounds.add(function(apple, up, down) {
             if (down) {
               apple.kill()
               if (apple.type !== 'bomb')
