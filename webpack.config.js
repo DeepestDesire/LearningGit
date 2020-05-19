@@ -2,6 +2,8 @@ var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
 
 // const marked = require('marked')
 // const renderer = new marked.Renderer()
@@ -14,18 +16,16 @@ module.exports = {
   entry: path.resolve(__dirname, 'src/app.js'),
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[contenthash:6].[name].bundle.js',
+    filename: '[hash:6].[name].bundle.js',
     // filename: '[name].bundle.js'
   },
   module: {
     rules: [
-      { test: /\.js?$/, loader: 'babel-loader' },
-      { test: /\.jsx?$/, loader: 'babel-loader' },
+      { test: /\.(js|jsx)?$/, loader: 'babel-loader?cacheDirectory=true' },
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: ['file-loader'],
       },
-
       {
         test: /\.module\.s(a|c)ss$/,
         loader: [
@@ -63,21 +63,6 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   test: /\.md$/,
-      //   use: [
-      //     {
-      //       loader: 'html-loader',
-      //     },
-      //     {
-      //       loader: 'markdown-loader',
-      //       options: {
-      //         pedantic: true,
-      //         renderer,
-      //       },
-      //     },
-      //   ],
-      // },
     ],
   },
   devServer: {
@@ -99,6 +84,7 @@ module.exports = {
       filename: isDevelopment ? '[name].css' : '[name].[hash].css',
       chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css',
     }),
+    new BundleAnalyzerPlugin(),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.scss'],
